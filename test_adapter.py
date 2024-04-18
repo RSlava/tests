@@ -1,4 +1,15 @@
 import requests
+from urllib3.util.ssl_ import create_urllib3_context
+from requests.adapters import HTTPAdapter
+
+
+class SSLAdapter(HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):
+        cert = ('svyatoslav.pem', 'svyatoslav.key', 'LqZLtJ')
+        context = create_urllib3_context()
+        context.load_cert_chain(certfile=cert[0], keyfile=cert[1], password=cert[2])
+        kwargs['ssl_context'] = context
+        return super().init_poolmanager(*args, **kwargs)
 
 
 def session_for_src_addr(addr: str) -> requests.Session:
@@ -7,6 +18,8 @@ def session_for_src_addr(addr: str) -> requests.Session:
     rather than auto-selecting it.
     """
     session = requests.Session()
+    session.verify = False  # If you don't want to validate server's public certificate
+    session.mount("https://", SSLAdapter())
     for prefix in ('http://', 'https://'):
         session.get_adapter(prefix).init_poolmanager(
             # those are default values from HTTPAdapter's constructor
@@ -26,7 +39,6 @@ def send_to_site(payload: dict) -> tuple:
     if payload is None:
         raise TypeError(f'Cannot send empty requests')
     print(type(payload))
-    cert = ('svyatoslav.pem', 'svyatoslav.key', 'LqZLtJ')
     s = session_for_src_addr('10.72.240.155')  # binds requests session to specific interface
     res = s.post('http://10.233.10.68:3457/siteapi/schedule/order', json=payload, cert=cert)
     print('sended to siteapi started')

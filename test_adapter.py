@@ -47,7 +47,7 @@ def send_to_site(payload: dict) -> tuple:
 
 
 if __name__ == '__main__':
-    payload = {"testDefinitionPath": '/Slava/RestApi/', "start": "2024-04-17T17:16:00Z", "priority": "normal",
+    payload = {"testDefinitionPath": '/Slava/RestApi/Membrane_vpn_dev', "start": "2024-04-17T17:16:00Z", "priority": "normal",
                "testDefinitionParameters": [{"name": "kind", "value": "RestAPI_AS"}]}
     respose = send_to_site(payload=payload)
     print(respose)

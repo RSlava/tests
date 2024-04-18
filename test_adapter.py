@@ -18,7 +18,7 @@ def session_for_src_addr(addr: str) -> requests.Session:
     return session
 
 
-def send_to_site(payload: dict) -> (requests.post().text, requests.post().status_code):
+def send_to_site(payload: dict) -> tuple:
     """
     This function sends requests to SiteApi
     """
@@ -39,4 +39,3 @@ if __name__ == '__main__':
     respose = send_to_site(payload=payload)
     print(respose)
     exit(0)
-    

@@ -40,7 +40,7 @@ def send_to_site(payload: dict) -> tuple:
         raise TypeError(f'Cannot send empty requests')
     print(type(payload))
     s = session_for_src_addr('10.72.240.155')  # binds requests session to specific interface
-    res = s.post('http://10.233.10.68:3457/siteapi/schedule/order', json=payload)
+    res = s.post('https://10.233.10.68:3457/siteapi/schedule/order', json=payload)
     print('sended to siteapi started')
     print(res.text, res.status_code)
     return res.text, res.status_code
